@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Mindfulness Wellness Colors: Warm soft cream background, sage and deep forest green primary accents, soft warm amber secondary accents */
+  --background: 34 30% 96%; /* #f8f6f0 - soft warm alabaster/cream */
+  --foreground: 160 20% 12%; /* #18231e - very dark slate green for clean contrast */
+  
+  --card: 0 0% 100%;
+  --card-foreground: 160 20% 12%;
+  
+  --popover: 0 0% 100%;
+  --popover-foreground: 160 20% 12%;
+  
+  /* Primary: Deep Calm Sage / Forest Green */
+  --primary: 158 35% 24%; /* #285241 - beautiful forest green */
+  --primary-foreground: 34 30% 96%;
+  
+  /* Secondary: Soft Mint / Sage */
+  --secondary: 158 20% 90%; /* #dee8e3 - calming sage tint */
+  --secondary-foreground: 158 35% 24%;
+  
+  /* Muted: Soft grey-green */
+  --muted: 160 10% 55%;
+  --muted-foreground: 160 15% 35%;
+  
+  /* Accent: Warm Sunlight Amber */
+  --accent: 38 65% 82%; /* #f3dca3 - uplifting soft amber glow */
+  --accent-foreground: 38 50% 20%;
+  
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  
+  --border: 160 15% 86%; /* subtle soft border */
+  --input: 160 15% 86%;
+  --ring: 158 35% 24%;
+  --radius: 1rem; /* modern rounded layouts */
+}
+
+.dark {
+  /* Dark mode: Deep serene obsidian-slate green */
+  --background: 160 20% 7%; /* #0f1412 - dark spiritual forest background */
+  --foreground: 34 20% 90%; /* soft cream text */
+  
+  --card: 160 20% 10%; /* #141c19 - slate green card */
+  --card-foreground: 34 20% 90%;
+  
+  --popover: 160 20% 10%;
+  --popover-foreground: 34 20% 90%;
+  
+  /* Primary: Calming vibrant sage */
+  --primary: 158 35% 42%; /* active tranquil green */
+  --primary-foreground: 160 20% 7%;
+  
+  /* Secondary: Darker forest green */
+  --secondary: 160 18% 14%;
+  --secondary-foreground: 34 20% 90%;
+  
+  /* Muted: Serene dark grey */
+  --muted: 160 10% 45%;
+  --muted-foreground: 160 10% 75%;
+  
+  /* Accent: Soft midnight gold */
+  --accent: 38 45% 25%;
+  --accent-foreground: 38 65% 82%;
+  
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  
+  --border: 160 15% 16%;
+  --input: 160 15% 16%;
+  --ring: 158 35% 42%;
+}
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 8px);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
