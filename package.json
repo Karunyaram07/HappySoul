@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:seed-gita": "node scripts/gita/index.js"
+    "db:seed-gita": "node scripts/gita/index.js",
+    "db:embed-gita": "node scripts/gita/embedVerses.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
