@@ -1,3 +1,7 @@
+// * SIGN-UP / REGISTER INTERFACE
+// ! This is a Client Component (rendered on the browser)
+// ? It collects user details, performs input validation, and issues sign-up requests.
+
 "use client";
 
 import React, { useState, Suspense } from "react";
@@ -5,11 +9,13 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Sparkles, Mail, Lock, User, Loader2, AlertCircle, CheckCircle } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 function SignUpForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") ?? "/dashboard";
+  const next = searchParams.get("next") ?? "/";
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -19,6 +25,7 @@ function SignUpForm() {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
+  // * Handle email/password sign-up registration
   const handleEmailSignUp = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -152,14 +159,14 @@ function SignUpForm() {
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground/60">
                       <User className="h-4.5 w-4.5" />
                     </div>
-                    <input
+                    <Input
                       id="fullName"
                       type="text"
                       required
                       placeholder="John Doe"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      className="block w-full pl-11 pr-4 py-3 bg-secondary/30 rounded-xl border border-border text-foreground placeholder:text-muted-foreground/60 text-sm outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary focus:bg-background"
+                      className="pl-11"
                     />
                   </div>
                 </div>
@@ -173,14 +180,14 @@ function SignUpForm() {
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground/60">
                       <Mail className="h-4.5 w-4.5" />
                     </div>
-                    <input
+                    <Input
                       id="email"
                       type="email"
                       required
                       placeholder="name@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="block w-full pl-11 pr-4 py-3 bg-secondary/30 rounded-xl border border-border text-foreground placeholder:text-muted-foreground/60 text-sm outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary focus:bg-background"
+                      className="pl-11"
                     />
                   </div>
                 </div>
@@ -194,14 +201,14 @@ function SignUpForm() {
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground/60">
                       <Lock className="h-4.5 w-4.5" />
                     </div>
-                    <input
+                    <Input
                       id="password"
                       type="password"
                       required
                       placeholder="Min. 6 characters"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="block w-full pl-11 pr-4 py-3 bg-secondary/30 rounded-xl border border-border text-foreground placeholder:text-muted-foreground/60 text-sm outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary focus:bg-background"
+                      className="pl-11"
                     />
                   </div>
                 </div>
@@ -215,23 +222,23 @@ function SignUpForm() {
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground/60">
                       <Lock className="h-4.5 w-4.5" />
                     </div>
-                    <input
+                    <Input
                       id="confirmPassword"
                       type="password"
                       required
                       placeholder="Re-enter password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="block w-full pl-11 pr-4 py-3 bg-secondary/30 rounded-xl border border-border text-foreground placeholder:text-muted-foreground/60 text-sm outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary focus:bg-background"
+                      className="pl-11"
                     />
                   </div>
                 </div>
 
-                {/* Submit Button */}
-                <button
+                {/* Submit Button using UI Button */}
+                <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full flex items-center justify-center py-3 px-4 rounded-xl bg-primary text-primary-foreground font-semibold text-sm shadow-md transition-all hover:bg-primary/95 hover:shadow hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none"
+                  className="w-full"
                 >
                   {loading ? (
                     <>
@@ -241,7 +248,7 @@ function SignUpForm() {
                   ) : (
                     "Create Account"
                   )}
-                </button>
+                </Button>
               </form>
 
               {/* Divider */}
@@ -256,11 +263,12 @@ function SignUpForm() {
                 </div>
               </div>
 
-              {/* Google Button */}
-              <button
+              {/* Google Button using UI Button */}
+              <Button
                 onClick={handleGoogleSignIn}
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-border bg-background hover:bg-secondary/40 font-semibold text-sm text-foreground transition-all hover:scale-[1.01] disabled:opacity-50"
+                variant="outline"
+                className="w-full gap-3"
               >
                 {/* Google Logo Icon */}
                 <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -282,7 +290,7 @@ function SignUpForm() {
                   />
                 </svg>
                 Google
-              </button>
+              </Button>
             </>
           )}
         </div>

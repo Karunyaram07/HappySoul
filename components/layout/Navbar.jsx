@@ -1,3 +1,7 @@
+// * RESPONSIVE SESSION-AWARE NAVIGATION BAR
+// ! This is a Client Component (rendered on the browser)
+// ? It dynamically listens to active user authentication states and handles theme toggles.
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -15,14 +19,15 @@ export default function Navbar() {
   const [user, setUser] = useState(null);
   const router = useRouter();
 
-  // Avoid hydration mismatch by waiting for mount
+  // * Avoid hydration mismatches by initializing client states in useEffect
   useEffect(() => {
     const supabase = createClient();
     
-    // Fetch initial session state
+    // * Query current authenticated user session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
     });
+
 
     // Subscribe to auth state updates
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {

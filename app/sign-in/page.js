@@ -1,3 +1,7 @@
+// * SIGN-IN / LOGIN INTERFACE
+// ! This is a Client Component (rendered on the browser)
+// ? It manages email/password form inputs, state validation, and OAuth triggers.
+
 "use client";
 
 import React, { useState, Suspense } from "react";
@@ -5,11 +9,13 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Sparkles, Mail, Lock, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") ?? "/dashboard";
+  const next = searchParams.get("next") ?? "/";
   const urlError = searchParams.get("error");
 
   const [email, setEmail] = useState("");
@@ -17,6 +23,7 @@ function SignInForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(urlError || null);
 
+  // * Handle email/password sign-in submission
   const handleEmailSignIn = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -51,6 +58,7 @@ function SignInForm() {
     }
   };
 
+  // * Trigger Supabase Google OAuth provider redirection
   const handleGoogleSignIn = async () => {
     setLoading(true);
     setError(null);
@@ -58,6 +66,7 @@ function SignInForm() {
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
+        // ? The callback route exchanges authorization codes for sessions
         redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
       },
     });
@@ -115,14 +124,14 @@ function SignInForm() {
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground/60">
                   <Mail className="h-4.5 w-4.5" />
                 </div>
-                <input
+                <Input
                   id="email"
                   type="email"
                   required
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-secondary/30 rounded-xl border border-border text-foreground placeholder:text-muted-foreground/60 text-sm outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary focus:bg-background"
+                  className="pl-11"
                 />
               </div>
             </div>
@@ -138,23 +147,23 @@ function SignInForm() {
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground/60">
                   <Lock className="h-4.5 w-4.5" />
                 </div>
-                <input
+                <Input
                   id="password"
                   type="password"
                   required
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-secondary/30 rounded-xl border border-border text-foreground placeholder:text-muted-foreground/60 text-sm outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary focus:bg-background"
+                  className="pl-11"
                 />
               </div>
             </div>
 
-            {/* Submit Button */}
-            <button
+            {/* Submit Button using UI Button */}
+            <Button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center py-3 px-4 rounded-xl bg-primary text-primary-foreground font-semibold text-sm shadow-md transition-all hover:bg-primary/95 hover:shadow hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none"
+              className="w-full"
             >
               {loading ? (
                 <>
@@ -164,7 +173,7 @@ function SignInForm() {
               ) : (
                 "Sign In"
               )}
-            </button>
+            </Button>
           </form>
 
           {/* Divider */}
@@ -179,11 +188,12 @@ function SignInForm() {
             </div>
           </div>
 
-          {/* Google Button */}
-          <button
+          {/* Google Button using UI Button */}
+          <Button
             onClick={handleGoogleSignIn}
             disabled={loading}
-            className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-border bg-background hover:bg-secondary/40 font-semibold text-sm text-foreground transition-all hover:scale-[1.01] disabled:opacity-50"
+            variant="outline"
+            className="w-full gap-3"
           >
             {/* Google Logo Icon */}
             <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -205,7 +215,7 @@ function SignInForm() {
               />
             </svg>
             Google
-          </button>
+          </Button>
         </div>
 
         {/* Signup Link */}

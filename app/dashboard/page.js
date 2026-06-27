@@ -1,72 +1,37 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { Sparkles, Heart, MessageSquare, BookOpen, Smile, Calendar, Compass, User } from "lucide-react";
+import { Sparkles, Heart, Languages, Target, Compass, User, AlertCircle } from "lucide-react";
+import Link from "next/link";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
 
-  // Server-side session check (double guard alongside middleware)
+  // * Double-Guard: Perform a server-side session check to secure dashboard route
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
+    // ! Redirect unauthenticated visitors immediately back to login
     redirect("/sign-in");
   }
 
-  // Fetch public profile if trigger has synced it
+  // * Fetch user profile information (automatically synced during sign-up and updated during onboarding)
   const { data: profile } = await supabase
     .from("profiles")
     .select("*")
     .eq("id", user.id)
     .single();
 
-  const displayName = profile?.full_name || user.email.split("@")[0];
+  // * Extra Guard: If onboarding is not completed, redirect to /onboarding
+  if (profile && !profile.is_onboarded) {
+    redirect("/onboarding");
+  }
 
-  const modules = [
-    {
-      icon: MessageSquare,
-      title: "Krishna AI Guide",
-      description: "Chat with your personal spiritual mentor inspired by the Bhagavad Gita.",
-      phase: "Phase 5",
-      color: "text-amber-500 bg-amber-500/10 border-amber-500/20",
-    },
-    {
-      icon: Compass,
-      title: "Daily Positive Thoughts",
-      description: "Read your custom daily affirmations and motivational quote.",
-      phase: "Phase 4",
-      color: "text-blue-500 bg-blue-500/10 border-blue-500/20",
-    },
-    {
-      icon: Heart,
-      title: "Yoga & Meditation Hub",
-      description: "Browse curated breathing exercises, yoga routines, and sleep focus guides.",
-      phase: "Phase 9",
-      color: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20",
-    },
-    {
-      icon: Smile,
-      title: "Mood Tracker",
-      description: "Track your emotional states and view a 7-day wellness chart.",
-      phase: "Phase 7",
-      color: "text-pink-500 bg-pink-500/10 border-pink-500/20",
-    },
-    {
-      icon: BookOpen,
-      title: "Inspirational Stories",
-      description: "Read motivational life stories, success journeys, and spiritual parables.",
-      phase: "Phase 6",
-      color: "text-purple-500 bg-purple-500/10 border-purple-500/20",
-    },
-    {
-      icon: Calendar,
-      title: "Daily Reflection Journal",
-      description: "Write private journals and analyze your positivity patterns using AI.",
-      phase: "Phase 8",
-      color: "text-cyan-500 bg-cyan-500/10 border-cyan-500/20",
-    },
-  ];
+  const displayName = profile?.full_name || user.email.split("@")[0];
+  const language = profile?.preferred_language || "English";
+  const goals = profile?.goals || [];
+  const interests = profile?.interests || [];
 
   return (
     <div className="relative min-h-screen bg-background py-10 sm:py-16">
@@ -76,10 +41,10 @@ export default async function DashboardPage() {
         <div className="absolute bottom-[20%] right-[10%] h-[350px] w-[350px] rounded-full bg-accent/15 blur-[120px]" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         
         {/* Welcome Banner */}
-        <div className="relative rounded-3xl border border-border bg-gradient-to-br from-card to-secondary/30 p-8 sm:p-10 shadow-xl mb-12">
+        <div className="relative rounded-3xl border border-border bg-gradient-to-br from-card to-secondary/30 p-8 sm:p-10 shadow-xl mb-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-primary">
@@ -90,7 +55,7 @@ export default async function DashboardPage() {
                 Peace be with you, <span className="text-primary">{displayName}</span>
               </h1>
               <p className="text-sm sm:text-base text-muted-foreground max-w-xl">
-                Welcome to Happy Soul. Take a deep breath and start your journey towards positive thinking, clarity, and mental calmness.
+                Welcome to Happy Soul. Your preferences have been successfully configured. This is a temporary view verifying your personalization data.
               </p>
             </div>
             
@@ -107,52 +72,78 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* Modules Grid */}
-        <div>
-          <h2 className="text-xl font-extrabold text-foreground mb-6 flex items-center gap-2">
-            Explore Sanctuary Modules
-          </h2>
+        {/* Verification Personalized Grid */}
+        <div className="grid gap-6 md:grid-cols-3 mb-8">
           
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {modules.map((mod) => {
-              const IconComponent = mod.icon;
-              return (
-                <div
-                  key={mod.title}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm hover:shadow transition-shadow overflow-hidden"
+          {/* Preferred Language Card */}
+          <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 border border-blue-500/20">
+                <Languages className="h-5 w-5" />
+              </div>
+              <h3 className="font-bold text-foreground text-sm uppercase tracking-wider">Preferred Language</h3>
+            </div>
+            <p className="text-2xl font-black text-primary">{language}</p>
+          </div>
+
+          {/* Goals Card */}
+          <div className="rounded-3xl border border-border bg-card p-6 shadow-sm md:col-span-2">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+                <Target className="h-5 w-5" />
+              </div>
+              <h3 className="font-bold text-foreground text-sm uppercase tracking-wider">Your Wellness Goals</h3>
+            </div>
+            {goals.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {goals.map((g) => (
+                  <span
+                    key={g}
+                    className="text-xs font-semibold bg-primary/10 text-primary border border-primary/20 px-3 py-1.5 rounded-full"
+                  >
+                    {g}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">No goals selected.</p>
+            )}
+          </div>
+
+        </div>
+
+        {/* Interests Card */}
+        <div className="rounded-3xl border border-border bg-card p-6 shadow-sm mb-12">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-600 border border-purple-500/20">
+              <Compass className="h-5 w-5" />
+            </div>
+            <h3 className="font-bold text-foreground text-sm uppercase tracking-wider">Your Interests</h3>
+          </div>
+          {interests.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {interests.map((i) => (
+                <span
+                  key={i}
+                  className="text-xs font-semibold bg-accent/20 text-accent-foreground border border-accent/20 px-3 py-1.5 rounded-full"
                 >
-                  <div>
-                    {/* Header */}
-                    <div className="flex items-center justify-between mb-4">
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl border ${mod.color}`}>
-                        <IconComponent className="h-5 w-5" />
-                      </div>
-                      <span className="text-[10px] font-bold tracking-wider uppercase bg-secondary text-primary border border-border px-2.5 py-0.5 rounded-full">
-                        {mod.phase}
-                      </span>
-                    </div>
+                  {i}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">No interests selected.</p>
+          )}
+        </div>
 
-                    {/* Content */}
-                    <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                      {mod.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {mod.description}
-                    </p>
-                  </div>
-
-                  {/* Coming soon button indicator */}
-                  <div className="mt-6 pt-4 border-t border-border/60">
-                    <button
-                      disabled
-                      className="w-full text-center py-2 text-xs font-semibold bg-secondary/60 text-muted-foreground rounded-lg border border-border/60 cursor-not-allowed"
-                    >
-                      Coming Soon
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+        {/* Verification Status Banner */}
+        <div className="flex items-start gap-4 rounded-3xl border border-emerald-500/20 bg-emerald-500/10 p-6 text-emerald-700 dark:text-emerald-300 shadow-inner">
+          <Heart className="h-6 w-6 shrink-0 text-accent fill-accent animate-pulse" />
+          <div className="space-y-1">
+            <h4 className="font-extrabold text-sm sm:text-base">Verification Successful!</h4>
+            <p className="text-xs sm:text-sm leading-relaxed opacity-90">
+              This confirms that Phase 3B: Onboarding completed successfully and persisted your customized data directly to your Supabase profile row.
+            </p>
           </div>
         </div>
 
