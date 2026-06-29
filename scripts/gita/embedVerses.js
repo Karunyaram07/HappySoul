@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const { loadEnv } = require("./utils");
 const { createClient } = require("@supabase/supabase-js");
-const { EMBEDDING_CONFIG, generateEmbedding, formatVerseForEmbedding, retryWithBackoff } = require("../../lib/embeddings/index.js");
+const { EMBEDDING_CONFIG, generateDocumentEmbedding, formatVerseForEmbedding } = require("../../lib/embeddings/index.js");
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -95,17 +95,9 @@ async function main() {
       try {
         const formattedText = formatVerseForEmbedding(v);
         
-        // Generate embedding wrapping inside the retry policy
-        const vector = await retryWithBackoff(
-          () => generateEmbedding(formattedText),
-          EMBEDDING_CONFIG.MAX_RETRIES,
-          EMBEDDING_CONFIG.RETRY_DELAY
-        );
-
-        // Verify vector dimensions before scheduling database update
-        if (vector.length !== EMBEDDING_CONFIG.DIMENSIONS) {
-          throw new Error(`Dimension mismatch: expected ${EMBEDDING_CONFIG.DIMENSIONS}, received ${vector.length}`);
-        }
+        // Generate embedding (retries and validation are handled internally by the provider)
+        const embedResult = await generateDocumentEmbedding(formattedText);
+        const vector = embedResult.embedding;
 
         validUpdates.push({
           id: v.id,
