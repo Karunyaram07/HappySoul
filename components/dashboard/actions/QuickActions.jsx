@@ -1,25 +1,18 @@
-// * QUICK ACTIONS PANEL WIDGET
+// * QUICK ACTIONS PANEL WIDGET — PHASE 6C.2.2
 // ! This is a Client Component (rendered on the browser)
-// ? It displays high-value features as interactive cards and displays a "Coming Soon" overlay on click.
+// ? Displays upcoming spiritual features as interactive discovery cards.
+// ? NOTE: Chaitanyam AI is no longer listed here; ChaitanyamCard (Tier 2) is the
+// ?       dedicated, prominent entry point for the AI companion.
 
 "use client";
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, PenTool, Wind, BookOpen, Music, Film, BellRing, X } from "lucide-react";
+import { PenTool, Wind, BookOpen, Music, Film, BellRing, X } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { useChaitanyam } from "@/components/krishna/ChaitanyamProvider";
 
+// Chaitanyam AI is intentionally omitted — ChaitanyamCard (Tier 2) is its dedicated entry point.
 const ACTIONS = [
-  {
-    id: "krishna-ai",
-    title: "Chaitanyam AI",
-    description: "Receive personalized guidance and spiritual wisdom from our AI assistant.",
-    icon: Sparkles,
-    color: "from-amber-500/10 to-orange-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
-    badgeColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-    badgeText: "Active",
-  },
   {
     id: "journal",
     title: "Daily Journal",
@@ -70,23 +63,8 @@ const ACTIONS = [
 export default function QuickActions() {
   const [activeNotification, setActiveNotification] = useState(null);
 
-  // Safely consume Chaitanyam context if inside provider
-  let chaitanyamContext = null;
-  try {
-    chaitanyamContext = useChaitanyam();
-  } catch {
-    chaitanyamContext = null;
-  }
-
   const handleActionClick = (action) => {
-    if (action.id === "krishna-ai") {
-      if (chaitanyamContext?.openChat) {
-        chaitanyamContext.openChat();
-        return;
-      }
-    }
-
-    setActiveNotification(`${action.title} will be fully integrated in the next phase! 🌿`);
+    setActiveNotification(`${action.title} will be fully integrated in an upcoming phase! 🌿`);
     setTimeout(() => {
       setActiveNotification((prev) => {
         if (prev && prev.includes(action.title)) return null;
@@ -140,7 +118,7 @@ export default function QuickActions() {
                 <button
                   key={action.id}
                   onClick={() => handleActionClick(action)}
-                  className="group relative flex flex-col items-start p-5 rounded-2xl border border-border/60 bg-gradient-to-br from-card to-secondary/15 text-left transition-all duration-300 hover:border-primary/45 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] select-none overflow-hidden cursor-pointer"
+                  className="group relative flex flex-col items-start p-5 rounded-2xl border border-border/60 bg-gradient-to-br from-card to-secondary/15 text-left transition-all duration-300 hover:border-primary/45 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] select-none overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 >
                   {/* Decorative background glow on hover */}
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />

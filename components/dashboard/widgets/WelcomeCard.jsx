@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, Calendar, Languages } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import AmbientGlow from "@/components/motion/AmbientGlow";
 
 export default function WelcomeCard({ profile }) {
   const [mounted, setMounted] = useState(false);
@@ -56,10 +57,17 @@ export default function WelcomeCard({ profile }) {
       className="w-full"
     >
       <Card className="relative overflow-hidden border border-border bg-gradient-to-br from-card via-card to-accent/5 p-6 sm:p-8 shadow-md">
-        {/* Glow decoration */}
-        <div className="absolute -top-12 -right-12 h-36 w-36 rounded-full bg-primary/10 blur-2xl pointer-events-none" />
+        {/* Subtle time-of-day-aware ambient aura (replaces static corner glow) */}
+        <AmbientGlow
+          size="md"
+          intensity="gentle"
+          variant="time-aware"
+          position="top-right"
+          duration={18}
+          className="-top-10 -right-10 pointer-events-none"
+        />
         
-        <CardContent className="p-0 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <CardContent className="relative z-10 p-0 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-primary">
               <Sparkles className="h-4.5 w-4.5 text-accent animate-pulse" />
@@ -79,7 +87,7 @@ export default function WelcomeCard({ profile }) {
           <div className="flex flex-wrap gap-4 shrink-0 mt-2 md:mt-0">
             {/* Language info */}
             <div className="flex items-center gap-3 bg-secondary/30 border border-border/65 px-4.5 py-2.5 rounded-2xl shadow-sm">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/10 text-blue-600">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400">
                 <Languages className="h-4 w-4" />
               </div>
               <div className="text-left">
@@ -90,7 +98,7 @@ export default function WelcomeCard({ profile }) {
 
             {/* Date info */}
             <div className="flex items-center gap-3 bg-secondary/30 border border-border/65 px-4.5 py-2.5 rounded-2xl shadow-sm">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                 <Calendar className="h-4 w-4" />
               </div>
               <div className="text-left">

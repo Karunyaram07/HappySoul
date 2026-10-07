@@ -1,7 +1,10 @@
-// * CHAITANYAM AI INPUT CONTROL - PHASE 6B.5
+// * CHAITANYAM AI INPUT CONTROL - PHASE 6B.5 / 6B.6
 // ! "use client" input bar enforcing MAX_MESSAGE_LENGTH = 1000 validation,
 // ? live character counter, duplicate submit guards, enter-to-send keyboard handler,
 // ? and mobile safe-area inset positioning.
+// ?
+// ? Phase 6B.6: clears unsent draft text whenever conversationId changes
+// ? (e.g. after loading a history conversation or starting a new chat).
 
 "use client";
 
@@ -13,7 +16,7 @@ import { Button } from "@/components/ui/button";
 const MAX_MESSAGE_LENGTH = 1000;
 
 export default function ChaitanyamInput() {
-  const { sendMessage, loading } = useChaitanyam();
+  const { sendMessage, loading, conversationId } = useChaitanyam();
   const [inputText, setInputText] = useState("");
   const textareaRef = useRef(null);
 
@@ -21,6 +24,22 @@ export default function ChaitanyamInput() {
   useEffect(() => {
     textareaRef.current?.focus();
   }, []);
+
+  // Phase 6B.6: clear any unsent draft when the active conversation changes.
+  // This fires when:
+  //   - a history conversation is loaded (conversationId → new UUID)
+  //   - New Conversation is started (conversationId → null)
+  // We track the previous value so we only clear on an actual change.
+  const prevConversationIdRef = useRef(conversationId);
+  useEffect(() => {
+    if (prevConversationIdRef.current !== conversationId) {
+      prevConversationIdRef.current = conversationId;
+      setInputText("");
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "auto";
+      }
+    }
+  }, [conversationId]);
 
   const currentLength = inputText.length;
   const isOverLimit = currentLength > MAX_MESSAGE_LENGTH;

@@ -1,7 +1,10 @@
-// * CHAITANYAM AI SLIDE-OVER DRAWER - PHASE 6B.5
+// * CHAITANYAM AI SLIDE-OVER DRAWER - PHASE 6B.5 / 6B.6
 // ! "use client" accessible hand-rolled drawer built with Framer Motion (z-[60])
 // ? Implements WAI-ARIA dialog patterns (role="dialog", aria-modal="true", Esc key listener,
 // ? focus management, body scroll locking, and mobile responsive glassmorphism presentation).
+// ?
+// ? Phase 6B.6 addition: two interior views — ACTIVE CHAT and HISTORY.
+// ? View is toggled via showHistory from ChaitanyamProvider (no separate state needed here).
 
 "use client";
 
@@ -11,9 +14,10 @@ import { useChaitanyam } from "./ChaitanyamProvider";
 import ChaitanyamHeader from "./ChaitanyamHeader";
 import ChaitanyamMessageList from "./ChaitanyamMessageList";
 import ChaitanyamInput from "./ChaitanyamInput";
+import ChaitanyamHistoryList from "./ChaitanyamHistoryList";
 
 export default function ChaitanyamDrawer() {
-  const { isOpen, closeChat } = useChaitanyam();
+  const { isOpen, closeChat, showHistory } = useChaitanyam();
   const drawerRef = useRef(null);
   const previousActiveElement = useRef(null);
   const shouldReduceMotion = useReducedMotion();
@@ -46,7 +50,10 @@ export default function ChaitanyamDrawer() {
         window.removeEventListener("keydown", handleKeyDown);
 
         // Restore focus to previous element when closing
-        if (previousActiveElement.current && typeof previousActiveElement.current.focus === "function") {
+        if (
+          previousActiveElement.current &&
+          typeof previousActiveElement.current.focus === "function"
+        ) {
           previousActiveElement.current.focus();
         }
       };
@@ -86,9 +93,20 @@ export default function ChaitanyamDrawer() {
             }}
             className="relative z-[60] w-full sm:w-[440px] h-full bg-background/95 border-l border-border/80 shadow-2xl backdrop-blur-xl flex flex-col focus:outline-none overflow-hidden"
           >
+            {/* Header is always visible in both views */}
             <ChaitanyamHeader />
-            <ChaitanyamMessageList />
-            <ChaitanyamInput />
+
+            {/* ── View Router ───────────────────────────────────────────── */}
+            {showHistory ? (
+              /* HISTORY VIEW */
+              <ChaitanyamHistoryList />
+            ) : (
+              /* ACTIVE CHAT VIEW */
+              <>
+                <ChaitanyamMessageList />
+                <ChaitanyamInput />
+              </>
+            )}
           </motion.div>
         </div>
       )}

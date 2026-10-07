@@ -1,12 +1,13 @@
-// * RECOMMENDED FOR YOU PANEL WIDGET
+// * RECOMMENDED FOR YOU PANEL WIDGET — PHASE 6C.2.2
 // ! This is a Client Component (rendered on the browser)
-// ? It displays static UI placeholder recommendations based on user preferences.
+// ? Displays static placeholder recommendations. CTA buttons now use an in-component
+// ? toast notification instead of alert() (accessibility fix from 6C.2.1 audit).
 
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
-import { BookOpen, PlayCircle, Trophy, ArrowUpRight } from "lucide-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { BookOpen, PlayCircle, Trophy, ArrowUpRight, BellRing, X } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -44,6 +45,18 @@ const RECOMMENDATIONS = [
 ];
 
 export default function RecommendationCard() {
+  const [activeNotification, setActiveNotification] = useState(null);
+
+  const handleActionClick = (rec) => {
+    setActiveNotification(`${rec.title} is coming soon in an upcoming phase! 🌿`);
+    setTimeout(() => {
+      setActiveNotification((prev) => {
+        if (prev && prev.includes(rec.title)) return null;
+        return prev;
+      });
+    }, 4000);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -51,7 +64,30 @@ export default function RecommendationCard() {
       transition={{ duration: 0.5, ease: "easeOut", delay: 0.35 }}
       className="w-full"
     >
-      <Card className="border border-border bg-card shadow-md">
+      <Card className="border border-border bg-card shadow-md relative">
+        {/* Toast Notification */}
+        <AnimatePresence>
+          {activeNotification && (
+            <motion.div
+              initial={{ opacity: 0, y: -16, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -16, scale: 0.95 }}
+              className="absolute top-0 left-0 right-0 z-50 flex justify-center px-4 pt-3"
+            >
+              <div className="flex items-center gap-3 bg-card border border-border/80 rounded-2xl shadow-xl px-5 py-3 max-w-sm text-sm text-foreground w-full">
+                <BellRing className="h-4 w-4 text-accent shrink-0" />
+                <span className="font-semibold text-xs flex-1">{activeNotification}</span>
+                <button
+                  onClick={() => setActiveNotification(null)}
+                  className="text-muted-foreground hover:text-foreground shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+                  aria-label="Dismiss notification"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <CardHeader>
           <CardTitle className="text-lg font-bold tracking-tight text-foreground">
             Recommended For You
@@ -87,8 +123,9 @@ export default function RecommendationCard() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="shrink-0 rounded-xl text-xs font-bold gap-1 cursor-pointer transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:border-primary mt-2 md:mt-0"
-                    onClick={() => alert(`${rec.title} feature is coming soon in Phase 5! 🌿`)}
+                    className="shrink-0 rounded-xl text-xs font-bold gap-1 cursor-pointer transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:border-primary mt-2 md:mt-0 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                    onClick={() => handleActionClick(rec)}
+                    aria-label={`${rec.actionLabel}: ${rec.title}`}
                   >
                     {rec.actionLabel}
                     <ArrowUpRight className="h-3.5 w-3.5" />

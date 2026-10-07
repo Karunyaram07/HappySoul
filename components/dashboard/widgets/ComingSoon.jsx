@@ -1,21 +1,17 @@
-// * UPCOMING FEATURES / TIMELINE WIDGET
+// * UPCOMING FEATURES / TIMELINE WIDGET — PHASE 6C.2.2
 // ! This is a Client Component (rendered on the browser)
-// ? It displays a modern vertical roadmap of features to be implemented in upcoming phases.
+// ? Displays a vertical roadmap of genuinely upcoming features.
+// ? NOTE: 'Krishna AI' was removed — it shipped as Chaitanyam AI (Phase 6B.5).
+// ?       Phase labels updated from the outdated 'Phase 5' to 'Upcoming'.
 
 "use client";
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Smile, BookOpen, Compass, Music, BrainCircuit } from "lucide-react";
+import { Smile, BookOpen, Compass, Music, BrainCircuit, PenTool } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 const ROADMAP = [
-  {
-    id: "krishna-ai",
-    title: "Krishna AI",
-    description: "Get real-time answers and spiritual guidance based on sacred scriptures.",
-    icon: Sparkles,
-  },
   {
     id: "mood-tracker",
     title: "Mood Tracker",
@@ -26,13 +22,19 @@ const ROADMAP = [
     id: "journal",
     title: "Smart Journal",
     description: "An AI-guided journal that prompts self-discipline and reflection writing.",
-    icon: BookOpen,
+    icon: PenTool,
   },
   {
     id: "reflection",
     title: "Daily Reflection",
     description: "Curated daily scriptures and insights tailored to your wellness intentions.",
     icon: Compass,
+  },
+  {
+    id: "stories",
+    title: "Spiritual Stories",
+    description: "Read uplifting tales and lessons of wisdom from ancient scriptures.",
+    icon: BookOpen,
   },
   {
     id: "music",
@@ -80,7 +82,7 @@ export default function ComingSoon() {
                         {item.title}
                       </h4>
                       <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-wider bg-secondary/80 border border-border/60 px-1.5 py-0.5 rounded-full">
-                        Phase 5
+                        Upcoming
                       </span>
                     </div>
                     

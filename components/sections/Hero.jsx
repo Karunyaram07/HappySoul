@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowRight, User, Brain, Heart, MessageCircle, Sun } from "lucide-react";
+import AmbientGlow from "@/components/motion/AmbientGlow";
 
 export default function Hero() {
   const containerVariants = {
@@ -34,8 +35,15 @@ export default function Hero() {
 
   return (
     <section className="relative w-full overflow-hidden bg-background py-20 lg:py-32">
-      {/* Calm glowing backdrops */}
+      {/* Calm glowing backdrops with shared AmbientGlow breathing halo */}
       <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
+        <AmbientGlow
+          size="xl"
+          intensity="gentle"
+          variant="accent"
+          position="top-left"
+          duration={18}
+        />
         <div className="absolute -top-[10%] left-[5%] h-[300px] w-[300px] rounded-full bg-accent/20 blur-[100px] dark:bg-accent/10" />
         <div className="absolute top-[40%] right-[10%] h-[400px] w-[400px] rounded-full bg-primary/10 blur-[120px] dark:bg-primary/5" />
       </div>
@@ -45,11 +53,70 @@ export default function Hero() {
           
           {/* Hero Content Left */}
           <motion.div
-            className="lg:col-span-7 flex flex-col justify-center space-y-8"
+            className="relative lg:col-span-7 flex flex-col justify-center space-y-8"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
+            {/* Subtle sacred lotus ambient presence behind headline */}
+            <div
+              aria-hidden="true"
+              role="presentation"
+              className="pointer-events-none absolute -top-10 -left-6 sm:-top-14 sm:-left-10 lg:-top-16 lg:-left-12 -z-10 select-none overflow-visible"
+            >
+              <style>{`
+                @keyframes hs-lotus-drift {
+                  0%, 100% {
+                    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+                    opacity: 0.08;
+                  }
+                  50% {
+                    transform: translate3d(12px, -8px, 0) rotate(2deg) scale(1.04);
+                    opacity: 0.12;
+                  }
+                }
+                @media (max-width: 640px) {
+                  @keyframes hs-lotus-drift {
+                    0%, 100% {
+                      transform: translate3d(0, 0, 0) rotate(0deg) scale(0.92);
+                      opacity: 0.06;
+                    }
+                    50% {
+                      transform: translate3d(6px, -4px, 0) rotate(1.2deg) scale(0.96);
+                      opacity: 0.09;
+                    }
+                  }
+                }
+                @media (prefers-reduced-motion: reduce) {
+                  .hs-lotus-ambient {
+                    animation: none !important;
+                    transform: none !important;
+                  }
+                }
+              `}</style>
+              <div
+                className="hs-lotus-ambient will-change-transform"
+                style={{
+                  animation: "hs-lotus-drift 16s ease-in-out infinite",
+                }}
+              >
+                <svg
+                  viewBox="0 0 200 200"
+                  className="h-64 w-64 sm:h-80 sm:w-80 lg:h-96 lg:w-96 text-primary fill-current transition-opacity"
+                  aria-hidden="true"
+                  role="presentation"
+                >
+                  <path d="M100 20 C92 55 86 95 100 140 C114 95 108 55 100 20 Z" />
+                  <path d="M100 140 C80 120 62 90 68 55 C82 75 92 108 100 140 Z" />
+                  <path d="M100 140 C120 120 138 90 132 55 C118 75 108 108 100 140 Z" />
+                  <path d="M100 140 C70 125 44 105 40 75 C60 90 80 120 100 140 Z" />
+                  <path d="M100 140 C130 125 156 105 160 75 C140 90 120 120 100 140 Z" />
+                  <path d="M100 140 C60 135 30 120 22 95 C45 105 75 130 100 140 Z" />
+                  <path d="M100 140 C140 135 170 120 178 95 C155 105 125 130 100 140 Z" />
+                  <path d="M75 142 C85 152 115 152 125 142 C115 147 85 147 75 142 Z" />
+                </svg>
+              </div>
+            </div>
             <motion.div className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary border border-border w-fit" variants={itemVariants}>
               <Sparkles className="h-3.5 w-3.5" />
               Your Daily Compass for Inner Harmony

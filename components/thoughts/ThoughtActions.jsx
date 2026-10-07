@@ -11,6 +11,7 @@ import { THOUGHT_UI } from "@/lib/thoughts/constants";
 
 export default function ThoughtActions({ quoteText, authorText, quoteId, onNextThought }) {
   const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const isDev = process.env.NODE_ENV !== "production";
 
@@ -25,8 +26,27 @@ export default function ThoughtActions({ quoteText, authorText, quoteId, onNextT
     }
   };
 
-  const handleShare = () => {
-    alert(`${THOUGHT_UI.share}: ${THOUGHT_UI.comingSoon}`);
+  const handleShare = async () => {
+    const formatted = `"${quoteText}" — ${authorText}`;
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title: "Daily Wisdom — Happy Soul",
+          text: formatted,
+        });
+        return;
+      } catch (err) {
+        if (err.name === "AbortError") return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(formatted);
+      setShared(true);
+      setTimeout(() => setShared(false), 2500);
+    } catch {
+      setShared(true);
+      setTimeout(() => setShared(false), 2500);
+    }
   };
 
   const handleFavoriteToggle = () => {
@@ -37,9 +57,9 @@ export default function ThoughtActions({ quoteText, authorText, quoteId, onNextT
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-border/40 mt-4 w-full">
-      {/* Screen Reader Live Region for copy feedback */}
+      {/* Screen Reader Live Region for copy/share feedback */}
       <span className="sr-only" aria-live="polite">
-        {copied ? THOUGHT_UI.copied : ""}
+        {copied ? THOUGHT_UI.copied : shared ? "Quote copied to share!" : ""}
       </span>
 
       {/* Main Actions Panel */}
@@ -82,11 +102,15 @@ export default function ThoughtActions({ quoteText, authorText, quoteId, onNextT
           variant="ghost"
           size="icon"
           onClick={handleShare}
-          aria-label={THOUGHT_UI.share}
-          title={THOUGHT_UI.shareTooltip}
-          className="rounded-lg h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-secondary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none transition-all duration-300"
+          aria-label={shared ? "Quote copied to share" : THOUGHT_UI.share}
+          title={shared ? "Quote copied to share!" : THOUGHT_UI.shareTooltip}
+          className={`rounded-lg h-9 w-9 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none ${
+            shared
+              ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10"
+              : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+          }`}
         >
-          <Share2 className="h-4.5 w-4.5" />
+          {shared ? <Check className="h-4.5 w-4.5 animate-pulse" /> : <Share2 className="h-4.5 w-4.5" />}
         </Button>
       </div>
 

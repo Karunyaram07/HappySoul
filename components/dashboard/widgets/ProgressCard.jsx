@@ -15,7 +15,7 @@ const METRICS = [
     label: "Current Streak",
     value: "0 Days",
     icon: Flame,
-    color: "text-orange-500",
+    color: "text-orange-500 dark:text-orange-400",
     bg: "bg-orange-500/10",
   },
   {
@@ -23,7 +23,7 @@ const METRICS = [
     label: "Meditation Mins",
     value: "0 Mins",
     icon: Clock,
-    color: "text-emerald-500",
+    color: "text-emerald-500 dark:text-emerald-400",
     bg: "bg-emerald-500/10",
   },
   {
@@ -31,7 +31,7 @@ const METRICS = [
     label: "Journal Entries",
     value: "0 Entries",
     icon: BookMarked,
-    color: "text-blue-500",
+    color: "text-blue-500 dark:text-blue-400",
     bg: "bg-blue-500/10",
   },
   {
@@ -39,7 +39,7 @@ const METRICS = [
     label: "AI Conversations",
     value: "0 Chats",
     icon: MessageSquare,
-    color: "text-purple-500",
+    color: "text-purple-500 dark:text-purple-400",
     bg: "bg-purple-500/10",
   },
 ];

@@ -1,16 +1,17 @@
-// * CHAITANYAM AI DRAWER HEADER - PHASE 6B.5
+// * CHAITANYAM AI DRAWER HEADER - PHASE 6B.5 / 6B.6
 // ? Header section for Chaitanyam AI drawer featuring title, spiritual subtitle,
-// ? "New conversation" reset trigger, and accessible single Close button.
+// ? History toggle button (Phase 6B.6), "New Conversation" reset trigger,
+// ? and accessible single Close button.
 
 "use client";
 
 import React from "react";
-import { Sparkles, RefreshCw, X } from "lucide-react";
+import { Sparkles, RefreshCw, X, History } from "lucide-react";
 import { useChaitanyam } from "./ChaitanyamProvider";
 import { Button } from "@/components/ui/button";
 
 export default function ChaitanyamHeader() {
-  const { closeChat, startNewConversation, loading } = useChaitanyam();
+  const { closeChat, startNewConversation, loading, showHistory, toggleHistory } = useChaitanyam();
 
   return (
     <div className="flex items-center justify-between px-5 py-4 border-b border-border/60 bg-card/90 backdrop-blur-md shrink-0">
@@ -27,13 +28,29 @@ export default function ChaitanyamHeader() {
             </span>
           </h2>
           <p className="text-xs text-muted-foreground truncate">
-            Your companion for wisdom, reflection & inner peace.
+            Your companion for wisdom, reflection &amp; inner peace.
           </p>
         </div>
       </div>
 
-      {/* Action Controls: New Conversation & Close */}
+      {/* Action Controls: History | New Conversation | Close */}
       <div className="flex items-center gap-1.5 shrink-0">
+        {/* History toggle — Phase 6B.6 */}
+        <Button
+          variant={showHistory ? "secondary" : "ghost"}
+          size="sm"
+          onClick={toggleHistory}
+          disabled={loading}
+          className="h-9 px-2.5 rounded-xl gap-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
+          title={showHistory ? "Back to chat" : "View conversation history"}
+          aria-label={showHistory ? "Back to active chat" : "View conversation history"}
+          aria-pressed={showHistory}
+        >
+          <History className="h-3.5 w-3.5" />
+          <span className="hidden sm:inline">{showHistory ? "Chat" : "History"}</span>
+        </Button>
+
+        {/* New Conversation reset */}
         <Button
           variant="ghost"
           size="sm"
@@ -47,6 +64,7 @@ export default function ChaitanyamHeader() {
           <span className="hidden sm:inline">New Chat</span>
         </Button>
 
+        {/* Close */}
         <Button
           variant="ghost"
           size="icon"

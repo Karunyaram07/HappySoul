@@ -5,15 +5,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useTheme } from "next-themes";
-import { Menu, X, Sun, Moon, Sparkles } from "lucide-react";
+import { Menu, X, Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Navbar() {
-  const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [user, setUser] = useState(null);
@@ -28,15 +26,10 @@ export default function Navbar() {
       setUser(session?.user ?? null);
     });
 
-
     // Subscribe to auth state updates
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
-
-    const timer = setTimeout(() => {
-      setMounted(true);
-    }, 0);
 
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -107,19 +100,7 @@ export default function Navbar() {
           {/* Action Buttons & Theme Toggler */}
           <div className="hidden md:flex items-center gap-4">
             {/* Theme Toggle */}
-            {mounted && (
-              <button
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-background/50 hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Toggle theme"
-              >
-                {theme === "dark" ? (
-                  <Sun className="h-4 w-4" />
-                ) : (
-                  <Moon className="h-4 w-4" />
-                )}
-              </button>
-            )}
+            <ThemeToggle compact />
 
             {user ? (
               <>
@@ -157,19 +138,7 @@ export default function Navbar() {
           {/* Mobile Menu & Theme Toggle Trigger */}
           <div className="flex items-center gap-2 md:hidden">
             {/* Theme Toggle (Mobile) */}
-            {mounted && (
-              <button
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-background/50 hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Toggle theme"
-              >
-                {theme === "dark" ? (
-                  <Sun className="h-4 w-4" />
-                ) : (
-                  <Moon className="h-4 w-4" />
-                )}
-              </button>
-            )}
+            <ThemeToggle compact />
 
             {/* Menu Toggle */}
             <button

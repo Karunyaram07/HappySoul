@@ -1,6 +1,13 @@
-// * KRISHNA AI API ROUTE HANDLER - PHASE 6B.4
+// * KRISHNA AI API ROUTE HANDLER - PHASE 6B.4 / 6B.7
 // ? Authenticated POST endpoint connecting user auth, request validation,
 // ? 6B.2 semantic retrieval, 6B.3 grounded AI reasoning, and DB persistence.
+// ?
+// ? Phase 6B.7: After persisting the user message, a bounded conversation
+// ? history is retrieved (max 10 messages / 4000 chars) and passed to the
+// ? prompt builder so Gemini has short-term conversational context.
+// ?
+// ? New conversation behaviour is UNCHANGED — no history is retrieved when
+// ? conversationId is absent.
 //
 // Endpoint: POST /api/krishna
 
@@ -8,6 +15,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { retrieveRelevantVerses } from "@/lib/krishna/retrieval";
 import { generateKrishnaResponse, KrishnaAIError } from "@/lib/krishna/generator";
+import { buildConversationContext, ContextFetchError } from "@/lib/krishna/context";
 
 const MAX_MESSAGE_LENGTH = 1000;
 
@@ -192,30 +200,78 @@ export async function handleKrishnaRequest(request, supabaseOverride = null) {
     }
 
     // ── 4. User Message Persistence ──────────────────────────────────────────
-    const { error: userMsgError } = await supabase.from("messages").insert({
-      conversation_id: activeConversationId,
-      role: "user",
-      content: normalizedMessage,
-    });
+    // Phase 6B.7: SELECT the new message ID so we can exclude it from the
+    // context history query below (preventing duplication of the current turn).
+    const { data: userMsg, error: userMsgError } = await supabase
+      .from("messages")
+      .insert({
+        conversation_id: activeConversationId,
+        role: "user",
+        content: normalizedMessage,
+      })
+      .select("id")
+      .single();
 
-    if (userMsgError) {
+    if (userMsgError || !userMsg) {
       return NextResponse.json(
         { error: "Failed to record message.", code: "INTERNAL_ERROR" },
         { status: 500 }
       );
     }
 
+    const currentUserMessageId = userMsg.id;
+
+    // ── 4B. Phase 6B.7: Build Bounded Conversation History ───────────────────
+    // Retrieve previous messages only when this is an existing conversation.
+    // New conversations (no conversationId in request) have no history to fetch.
+    //
+    // If context retrieval fails, we degrade gracefully: the request continues
+    // without history (current-message-only generation). This preserves chatbot
+    // availability even if the history query encounters a transient DB issue.
+    // Authentication and ownership checks are NOT bypassed by this fallback.
+    let conversationHistoryBlock = "";
+
+    if (conversationId) {
+      // Only attempt history retrieval for an existing, ownership-verified conversation.
+      // The ownership check already passed in Step 3.
+      try {
+        conversationHistoryBlock = await buildConversationContext(
+          supabase,
+          activeConversationId,
+          currentUserMessageId
+        );
+      } catch (contextErr) {
+        // Graceful degradation: log the issue server-side; do not surface to client.
+        // ContextFetchError is sanitized and contains no DB credentials or secrets.
+        const detail = contextErr instanceof ContextFetchError
+          ? contextErr.userMessage
+          : "Unknown context error";
+        console.warn(
+          `[Krishna Route] 6B.7 context retrieval failed — degrading to no-history. ` +
+          `conversationId=${activeConversationId}, reason=${detail}`
+        );
+        conversationHistoryBlock = "";
+      }
+    }
+
     // ── 5. Phase 6B.2 Retrieval Integration ──────────────────────────────────
-    // Uses the user's authenticated Supabase client
+    // Gita retrieval always operates on the CURRENT message only.
+    // Conversation history is NEVER used as a retrieval query.
+    // Threshold, count, and multilingual behavior are unchanged from 6B.2.
     const retrievalResult = await retrieveRelevantVerses(
       supabase,
       normalizedMessage
     );
 
-    // ── 6. Phase 6B.3 Reasoning Integration ──────────────────────────────────
+    // ── 6. Phase 6B.3 / 6B.7 Reasoning Integration ───────────────────────────
+    // Pass conversationHistoryBlock to the generator.
+    // generator.js is unchanged — it passes options through to buildKrishnaPrompt.
+    // The history string is passed via the options object so the generator
+    // signature remains stable.
     const aiResponse = await generateKrishnaResponse(
       normalizedMessage,
-      retrievalResult.verses
+      retrievalResult.verses,
+      { conversationHistory: conversationHistoryBlock }
     );
 
     // ── 7. Assistant Message Persistence ─────────────────────────────────────
