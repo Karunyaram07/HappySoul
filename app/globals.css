@@ -1,3 +1,6 @@
+/* Telugu fonts loaded via standard CSS import — Next.js font loader does not support these on Vercel */
+@import url('https://fonts.googleapis.com/css2?family=Ramabhadra&family=Chathura:wght@400;700&display=swap');
+
 @import "tailwindcss";
 
 @plugin "tailwindcss-animate";
@@ -102,8 +105,8 @@
 
   --font-heading: var(--font-montserrat), sans-serif;
   --font-condensed: var(--font-roboto-condensed), sans-serif;
-  --font-telugu: var(--font-ramabhadra), sans-serif;
-  --font-chathura: var(--font-chathura), sans-serif;
+  --font-telugu: 'Ramabhadra', sans-serif;
+  --font-chathura: 'Chathura', sans-serif;
 }
 
 body {
@@ -122,21 +125,21 @@ body {
 }
 
 .font-telugu {
-  font-family: var(--font-ramabhadra), sans-serif;
+  font-family: 'Ramabhadra', sans-serif;
 }
 
 .font-chathura {
-  font-family: var(--font-chathura), sans-serif;
+  font-family: 'Chathura', sans-serif;
 }
 
 /* Telugu reading line-height ensuring no diacritics clipping */
 .telugu-reading {
-  font-family: var(--font-ramabhadra), sans-serif;
+  font-family: 'Ramabhadra', sans-serif;
   line-height: 2.2;
 }
 
 .telugu-display {
-  font-family: var(--font-chathura), sans-serif;
+  font-family: 'Chathura', sans-serif;
   line-height: 1.6;
 }
 

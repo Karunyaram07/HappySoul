@@ -1,4 +1,4 @@
-import { Montserrat, Roboto_Condensed, Ramabhadra, Chathura } from "next/font/google";
+import { Montserrat, Roboto_Condensed } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
@@ -16,19 +16,6 @@ const robotoCondensed = Roboto_Condensed({
   weight: ["400", "500", "600", "700"],
 });
 
-const ramabhadra = Ramabhadra({
-  weight: "400",
-  subsets: ["telugu"],
-  variable: "--font-ramabhadra",
-  display: "swap",
-});
-
-const chathura = Chathura({
-  weight: ["400", "700"],
-  subsets: ["telugu"],
-  variable: "--font-chathura",
-  display: "swap",
-});
 
 export const metadata = {
   title: "Happy Soul – AI Spiritual Wellness & Mindfulness Companion",
@@ -41,7 +28,7 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${montserrat.variable} ${robotoCondensed.variable} ${ramabhadra.variable} ${chathura.variable} h-full antialiased`}
+      className={`${montserrat.variable} ${robotoCondensed.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <ThemeProvider
