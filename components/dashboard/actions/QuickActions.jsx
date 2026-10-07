@@ -8,15 +8,17 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, PenTool, Wind, BookOpen, Music, Film, BellRing, X } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useChaitanyam } from "@/components/krishna/ChaitanyamProvider";
 
 const ACTIONS = [
   {
     id: "krishna-ai",
-    title: "Krishna AI",
+    title: "Chaitanyam AI",
     description: "Receive personalized guidance and spiritual wisdom from our AI assistant.",
     icon: Sparkles,
     color: "from-amber-500/10 to-orange-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
-    badgeColor: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+    badgeColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+    badgeText: "Active",
   },
   {
     id: "journal",
@@ -25,6 +27,7 @@ const ACTIONS = [
     icon: PenTool,
     color: "from-blue-500/10 to-teal-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
     badgeColor: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+    badgeText: "Coming Soon",
   },
   {
     id: "meditation",
@@ -33,6 +36,7 @@ const ACTIONS = [
     icon: Wind,
     color: "from-emerald-500/10 to-teal-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
     badgeColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+    badgeText: "Coming Soon",
   },
   {
     id: "stories",
@@ -41,6 +45,7 @@ const ACTIONS = [
     icon: BookOpen,
     color: "from-purple-500/10 to-indigo-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
     badgeColor: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
+    badgeText: "Coming Soon",
   },
   {
     id: "music",
@@ -49,6 +54,7 @@ const ACTIONS = [
     icon: Music,
     color: "from-pink-500/10 to-rose-500/10 text-pink-600 dark:text-pink-400 border-pink-500/20",
     badgeColor: "bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-500/20",
+    badgeText: "Coming Soon",
   },
   {
     id: "movies",
@@ -57,18 +63,33 @@ const ACTIONS = [
     icon: Film,
     color: "from-cyan-500/10 to-blue-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/20",
     badgeColor: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/20",
+    badgeText: "Coming Soon",
   },
 ];
 
 export default function QuickActions() {
   const [activeNotification, setActiveNotification] = useState(null);
 
-  const handleActionClick = (title) => {
-    setActiveNotification(`${title} will be fully integrated in the next phase! 🌿`);
-    // Auto-clear notification after 4 seconds
+  // Safely consume Chaitanyam context if inside provider
+  let chaitanyamContext = null;
+  try {
+    chaitanyamContext = useChaitanyam();
+  } catch {
+    chaitanyamContext = null;
+  }
+
+  const handleActionClick = (action) => {
+    if (action.id === "krishna-ai") {
+      if (chaitanyamContext?.openChat) {
+        chaitanyamContext.openChat();
+        return;
+      }
+    }
+
+    setActiveNotification(`${action.title} will be fully integrated in the next phase! 🌿`);
     setTimeout(() => {
       setActiveNotification((prev) => {
-        if (prev && prev.includes(title)) return null;
+        if (prev && prev.includes(action.title)) return null;
         return prev;
       });
     }, 4000);
@@ -118,7 +139,7 @@ export default function QuickActions() {
               return (
                 <button
                   key={action.id}
-                  onClick={() => handleActionClick(action.title)}
+                  onClick={() => handleActionClick(action)}
                   className="group relative flex flex-col items-start p-5 rounded-2xl border border-border/60 bg-gradient-to-br from-card to-secondary/15 text-left transition-all duration-300 hover:border-primary/45 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] select-none overflow-hidden cursor-pointer"
                 >
                   {/* Decorative background glow on hover */}
@@ -133,7 +154,7 @@ export default function QuickActions() {
                       {action.title}
                     </h4>
                     <span className={`text-[9px] font-bold uppercase tracking-wider border px-1.5 py-0.5 rounded-full shrink-0 ${action.badgeColor}`}>
-                      Coming Soon
+                      {action.badgeText || "Coming Soon"}
                     </span>
                   </div>
 
