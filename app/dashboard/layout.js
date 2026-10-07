@@ -22,7 +22,7 @@ export default async function DashboardLayout({ children }) {
   // Retrieve profile information
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id, full_name, is_onboarded")
+    .select("id, full_name, is_onboarded, preferred_language")
     .eq("id", user.id)
     .single();
 
@@ -38,7 +38,11 @@ export default async function DashboardLayout({ children }) {
     : "Seeker";
 
   return (
-    <ChaitanyamProvider userId={user.id} userFirstName={firstName}>
+    <ChaitanyamProvider
+      userId={user.id}
+      userFirstName={firstName}
+      preferredLanguage={profile?.preferred_language || "English"}
+    >
       {children}
     </ChaitanyamProvider>
   );

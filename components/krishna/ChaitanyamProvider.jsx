@@ -17,6 +17,7 @@ import React, {
   useCallback,
 } from "react";
 import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import {
   sendChaitanyamMessage,
@@ -32,7 +33,15 @@ const DynamicChaitanyamDrawer = dynamic(() => import("./ChaitanyamDrawer"), {
 const ChaitanyamContext = createContext(null);
 const MAX_MESSAGE_LENGTH = 1000;
 
-export function ChaitanyamProvider({ children, userId = null, userFirstName = "Seeker" }) {
+export function ChaitanyamProvider({
+  children,
+  userId = null,
+  userFirstName = "Seeker",
+  preferredLanguage = "English",
+}) {
+  const pathname = usePathname();
+  const isFullscreenPage = pathname === "/dashboard/chaitanyam";
+
   // ── Phase 6B.5 Chat State ──────────────────────────────────────────────────
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -162,17 +171,17 @@ export function ChaitanyamProvider({ children, userId = null, userFirstName = "S
     setLoadingHistory(false);
   }, [loadingHistory]);
 
-  // ── Phase 6B.6: Auto-fetch history when drawer opens ──────────────────────
-  // Fetch on first open; skip if already fetched this session.
+  // ── Phase 6B.6 & 6C.2.3: Auto-fetch history when drawer or full page opens ──
+  // Fetch on first open/visit; skip if already fetched this session.
   useEffect(() => {
-    if (isOpen && !historyFetchedRef.current && userId) {
+    if ((isOpen || isFullscreenPage) && !historyFetchedRef.current && userId) {
       loadConversationsList();
     }
     // When drawer closes, reset history view but keep the list cached
     if (!isOpen) {
       setShowHistory(false);
     }
-  }, [isOpen, userId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isOpen, isFullscreenPage, userId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Phase 6B.6: Load a Conversation's Messages ────────────────────────────
   const loadConversation = useCallback(
@@ -406,13 +415,16 @@ export function ChaitanyamProvider({ children, userId = null, userFirstName = "S
     loadingConversationId,
     loadConversation,
     refreshConversationsList,
+    // Phase 6C.2.3
+    preferredLanguage,
+    isFullscreenPage,
   };
 
   return (
     <ChaitanyamContext.Provider value={value}>
       {children}
-      <ChaitanyamTrigger />
-      <DynamicChaitanyamDrawer />
+      {!isFullscreenPage && <ChaitanyamTrigger />}
+      {!isFullscreenPage && <DynamicChaitanyamDrawer />}
     </ChaitanyamContext.Provider>
   );
 }

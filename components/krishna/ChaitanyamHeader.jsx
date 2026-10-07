@@ -6,12 +6,19 @@
 "use client";
 
 import React from "react";
-import { Sparkles, RefreshCw, X, History } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Sparkles, RefreshCw, X, History, Maximize2 } from "lucide-react";
 import { useChaitanyam } from "./ChaitanyamProvider";
 import { Button } from "@/components/ui/button";
 
 export default function ChaitanyamHeader() {
+  const router = useRouter();
   const { closeChat, startNewConversation, loading, showHistory, toggleHistory } = useChaitanyam();
+
+  const handleFullscreen = () => {
+    closeChat();
+    router.push("/dashboard/chaitanyam");
+  };
 
   return (
     <div className="flex items-center justify-between px-5 py-4 border-b border-border/60 bg-card/90 backdrop-blur-md shrink-0">
@@ -62,6 +69,18 @@ export default function ChaitanyamHeader() {
         >
           <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
           <span className="hidden sm:inline">New Chat</span>
+        </Button>
+
+        {/* Fullscreen Expand — Phase 6C.2.3 */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleFullscreen}
+          className="h-9 w-9 rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
+          title="Open in full page"
+          aria-label="Open Chaitanyam AI in dedicated full page"
+        >
+          <Maximize2 className="h-4 w-4" />
         </Button>
 
         {/* Close */}

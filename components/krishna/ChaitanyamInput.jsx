@@ -16,9 +16,10 @@ import { Button } from "@/components/ui/button";
 const MAX_MESSAGE_LENGTH = 1000;
 
 export default function ChaitanyamInput() {
-  const { sendMessage, loading, conversationId } = useChaitanyam();
+  const { sendMessage, loading, conversationId, preferredLanguage } = useChaitanyam();
   const [inputText, setInputText] = useState("");
   const textareaRef = useRef(null);
+  const isTelugu = preferredLanguage === "Telugu";
 
   // Focus textarea when component mounts
   useEffect(() => {
@@ -82,7 +83,7 @@ export default function ChaitanyamInput() {
       onSubmit={handleSubmit}
       className="p-4 border-t border-border/60 bg-card/90 backdrop-blur-md pb-[calc(1rem+env(safe-area-inset-bottom))] shrink-0"
     >
-      <div className="relative flex flex-col gap-2">
+      <div className="relative flex flex-col gap-2 max-w-3xl mx-auto w-full">
         <div className="relative flex items-end gap-2 bg-secondary/30 border border-border rounded-2xl p-2 transition-all focus-within:border-primary focus-within:bg-background focus-within:ring-1 focus-within:ring-primary">
           <textarea
             ref={textareaRef}
@@ -91,8 +92,10 @@ export default function ChaitanyamInput() {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             disabled={loading}
-            placeholder="Ask Chaitanyam AI for guidance..."
-            className="flex-1 bg-transparent border-0 outline-none resize-none text-sm text-foreground placeholder:text-muted-foreground/60 px-2.5 py-1.5 max-h-[120px] min-h-[38px] disabled:opacity-50"
+            placeholder={isTelugu ? "చైతన్యం AI వద్ద నుండి మార్గదర్శకత్వం కోరండి..." : "Ask Chaitanyam AI for guidance..."}
+            className={`flex-1 bg-transparent border-0 outline-none resize-none text-foreground placeholder:text-muted-foreground/60 px-2.5 py-1.5 max-h-[120px] min-h-[38px] disabled:opacity-50 ${
+              isTelugu ? "font-telugu leading-[2.0] text-[15px]" : "text-sm"
+            }`}
             aria-label="Ask Chaitanyam AI for guidance"
           />
 

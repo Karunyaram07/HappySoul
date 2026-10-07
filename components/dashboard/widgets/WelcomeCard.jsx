@@ -71,14 +71,14 @@ export default function WelcomeCard({ profile }) {
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-primary">
               <Sparkles className="h-4.5 w-4.5 text-accent animate-pulse" />
-              <span className="text-xs font-bold tracking-wider uppercase">Your Sanctuary</span>
+              <span className="text-xs font-condensed font-bold tracking-wider uppercase">Your Sanctuary</span>
             </div>
             
-            <h2 className="text-3xl font-extrabold text-foreground sm:text-4xl leading-tight">
+            <h2 className="text-3xl font-heading font-extrabold text-foreground sm:text-4xl leading-tight">
               {greeting}, <span className="text-primary">{displayName}</span> 🌿
             </h2>
             
-            <p className="text-sm sm:text-base text-muted-foreground max-w-xl leading-relaxed">
+            <p className={`text-sm sm:text-base text-muted-foreground max-w-xl ${language === "Telugu" ? "font-telugu leading-[2.2]" : "leading-relaxed"}`}>
               Continue your journey toward a peaceful, mindful, and positive life. We are here to support your daily spiritual growth.
             </p>
           </div>

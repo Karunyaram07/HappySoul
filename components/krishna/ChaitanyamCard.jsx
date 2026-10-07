@@ -10,8 +10,9 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { Sparkles, ArrowRight, MessageCircle, BookOpen, Heart, Flame } from "lucide-react";
+import { Sparkles, ArrowRight, MessageCircle, BookOpen, Heart, Flame, Maximize2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import AmbientGlow from "@/components/motion/AmbientGlow";
@@ -91,10 +92,10 @@ export default function ChaitanyamCard() {
 
               <div className="text-left">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="text-base font-bold tracking-tight text-foreground">
+                  <h3 className="text-base font-heading font-bold tracking-tight text-foreground">
                     Chaitanyam AI
                   </h3>
-                  <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
+                  <span className="text-[9px] font-condensed font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
                     Active
                   </span>
                 </div>
@@ -104,16 +105,27 @@ export default function ChaitanyamCard() {
               </div>
             </div>
 
-            {/* Primary CTA */}
-            <Button
-              onClick={openChat}
-              className="shrink-0 self-start rounded-2xl gap-2 text-sm font-bold px-5 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 shadow-sm cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              aria-label="Open Chaitanyam AI spiritual companion"
-            >
-              <MessageCircle className="h-4 w-4" aria-hidden="true" />
-              Ask Chaitanyam
-              <ArrowRight className="h-3.5 w-3.5 opacity-70" aria-hidden="true" />
-            </Button>
+            {/* Primary Actions: Full Page & Ask Chaitanyam */}
+            <div className="flex items-center gap-2 self-start shrink-0">
+              <Link
+                href="/dashboard/chaitanyam"
+                className="hidden sm:inline-flex items-center justify-center h-10 w-10 rounded-2xl border border-border/80 bg-card hover:bg-secondary text-muted-foreground hover:text-foreground transition-all duration-200 cursor-pointer shadow-xs focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+                title="Open in full page"
+                aria-label="Open Chaitanyam AI in dedicated full page"
+              >
+                <Maximize2 className="h-4 w-4" />
+              </Link>
+
+              <Button
+                onClick={openChat}
+                className="rounded-2xl gap-2 text-sm font-bold px-5 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 shadow-sm cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                aria-label="Open Chaitanyam AI spiritual companion"
+              >
+                <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                Ask Chaitanyam
+                <ArrowRight className="h-3.5 w-3.5 opacity-70" aria-hidden="true" />
+              </Button>
+            </div>
           </div>
 
           {/* ── Tagline ────────────────────────────────────────────────── */}

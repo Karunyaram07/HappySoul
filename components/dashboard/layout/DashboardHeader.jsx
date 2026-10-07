@@ -50,9 +50,9 @@ export default function DashboardHeader({ profile }) {
       <div className="space-y-1 text-left">
         <div className="flex items-center gap-2 text-primary">
           <Compass className="h-4.5 w-4.5 text-accent animate-pulse" />
-          <span className="text-xs font-semibold tracking-widest uppercase">Sanctuary Hub</span>
+          <span className="text-xs font-condensed font-semibold tracking-widest uppercase">Sanctuary Hub</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+        <h1 className="text-2xl sm:text-3xl font-heading font-extrabold tracking-tight text-foreground">
           Welcome to Your Sanctuary
         </h1>
         <p className="text-xs sm:text-sm text-muted-foreground">

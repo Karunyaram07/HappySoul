@@ -22,13 +22,19 @@ const STARTER_PROMPTS = [
  * Renders text safely preserving line breaks and basic bold (**text**) / bullet points
  * WITHOUT dangerouslySetInnerHTML or external markdown dependencies.
  */
-function FormattedMessageContent({ content }) {
+function FormattedMessageContent({ content, isTelugu = false }) {
   if (!content || typeof content !== "string") return null;
 
   const lines = content.split("\n");
 
   return (
-    <div className="space-y-1.5 leading-relaxed text-sm">
+    <div
+      className={
+        isTelugu
+          ? "space-y-2 font-telugu leading-[2.2] text-[15px]"
+          : "space-y-1.5 leading-relaxed text-sm"
+      }
+    >
       {lines.map((line, lineIdx) => {
         const trimmed = line.trim();
 
@@ -71,8 +77,18 @@ function FormattedMessageContent({ content }) {
 }
 
 export default function ChaitanyamMessageList() {
-  const { messages, loading, error, userFirstName, sendMessage, retry, lastFailedText } = useChaitanyam();
+  const {
+    messages,
+    loading,
+    error,
+    userFirstName,
+    sendMessage,
+    retry,
+    lastFailedText,
+    preferredLanguage,
+  } = useChaitanyam();
   const bottomRef = useRef(null);
+  const isTelugu = preferredLanguage === "Telugu";
 
   // Auto-scroll to latest message
   useEffect(() => {
@@ -82,7 +98,8 @@ export default function ChaitanyamMessageList() {
   const name = userFirstName || "Seeker";
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-5">
+    <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5">
+      <div className="w-full max-w-3xl mx-auto space-y-5">
       {/* ── Empty / Welcome State ────────────────────────────────────────── */}
       {messages.length === 0 && (
         <div className="flex flex-col items-center justify-center text-center py-6 px-3 space-y-6">
@@ -153,7 +170,7 @@ export default function ChaitanyamMessageList() {
                   : "bg-card border border-border/80 text-card-foreground rounded-tl-xs"
               }`}
             >
-              <FormattedMessageContent content={msg.content} />
+              <FormattedMessageContent content={msg.content} isTelugu={isTelugu} />
 
               {/* Citations & Grounding Metadata for Assistant Messages */}
               {!isUser && (
@@ -222,6 +239,7 @@ export default function ChaitanyamMessageList() {
         <p className="text-[11px] text-muted-foreground/80 leading-relaxed px-2">
           Guidance inspired by the Bhagavad Gita — not therapy or medical advice.
         </p>
+      </div>
       </div>
     </div>
   );
