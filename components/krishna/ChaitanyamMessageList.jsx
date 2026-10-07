@@ -104,8 +104,14 @@ export default function ChaitanyamMessageList() {
       {messages.length === 0 && (
         <div className="flex flex-col items-center justify-center text-center py-6 px-3 space-y-6">
           <div className="relative">
-            <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-primary/70 text-amber-300 shadow-xl border border-accent/40">
-              <Sparkles className="h-8 w-8 text-amber-300 animate-pulse" />
+            {/* Subtle sacred lotus / peacock aura behind the icon */}
+            <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-sky-500/20 via-amber-400/20 to-emerald-500/20 blur-md opacity-70 animate-pulse pointer-events-none" />
+            <div className="relative flex h-18 w-18 items-center justify-center rounded-3xl bg-card border border-accent/40 shadow-xl overflow-hidden p-1">
+              <img
+                src="/chaitanyam-assets/chaitanyam-ai-icon.png"
+                alt="Chaitanyam AI"
+                className="h-full w-full object-contain"
+              />
             </div>
             <div className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-accent text-accent-foreground border border-border shadow-sm">
               <Compass className="h-3.5 w-3.5" />
@@ -153,13 +159,21 @@ export default function ChaitanyamMessageList() {
           >
             {/* Avatar */}
             <div
-              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border shadow-xs ${
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border shadow-xs overflow-hidden ${
                 isUser
                   ? "bg-secondary text-foreground border-border"
-                  : "bg-primary text-accent border-accent/30"
+                  : "bg-primary/10 border-accent/40 p-0.5"
               }`}
             >
-              {isUser ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+              {isUser ? (
+                <User className="h-4 w-4" />
+              ) : (
+                <img
+                  src="/chaitanyam-assets/chaitanyam-ai-icon.png"
+                  alt=""
+                  className="h-full w-full object-contain"
+                />
+              )}
             </div>
 
             {/* Message Card / Bubble */}
@@ -167,7 +181,7 @@ export default function ChaitanyamMessageList() {
               className={`max-w-[85%] sm:max-w-[78%] rounded-2xl p-4 text-left shadow-xs ${
                 isUser
                   ? "bg-primary text-primary-foreground rounded-tr-xs"
-                  : "bg-card border border-border/80 text-card-foreground rounded-tl-xs"
+                  : "bg-card/95 border border-border/80 text-card-foreground rounded-tl-xs backdrop-blur-xs"
               }`}
             >
               <FormattedMessageContent content={msg.content} isTelugu={isTelugu} />
@@ -200,10 +214,14 @@ export default function ChaitanyamMessageList() {
       {/* Loading Skeleton Indicator */}
       {loading && (
         <div className="flex items-start gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary text-accent border border-accent/30 shadow-xs">
-            <Bot className="h-4 w-4 animate-pulse" />
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-accent/40 shadow-xs overflow-hidden p-0.5">
+            <img
+              src="/chaitanyam-assets/chaitanyam-ai-icon.png"
+              alt=""
+              className="h-full w-full object-contain animate-pulse"
+            />
           </div>
-          <div className="flex items-center gap-2 bg-card border border-border/80 rounded-2xl rounded-tl-xs px-4 py-3 text-xs text-muted-foreground shadow-xs">
+          <div className="flex items-center gap-2 bg-card/95 backdrop-blur-xs border border-border/80 rounded-2xl rounded-tl-xs px-4 py-3 text-xs text-muted-foreground shadow-xs">
             <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
             <span>Chaitanyam is reflecting on Gita teachings...</span>
           </div>

@@ -21,54 +21,58 @@ export default function ChaitanyamHeader() {
   };
 
   return (
-    <div className="flex items-center justify-between px-5 py-4 border-b border-border/60 bg-card/90 backdrop-blur-md shrink-0">
+    <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-border/60 bg-card/90 backdrop-blur-md shrink-0 gap-3">
       {/* Title & Spiritual Subtitle */}
-      <div className="flex items-center gap-3 text-left min-w-0">
-        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-accent border border-accent/30 shadow-md shrink-0">
-          <Sparkles className="h-5 w-5 text-amber-300 animate-pulse" />
+      <div className="flex items-center gap-2.5 text-left min-w-0 flex-1">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 border border-accent/30 shadow-md shrink-0 overflow-hidden">
+          <img
+            src="/chaitanyam-assets/chaitanyam-ai-icon.png"
+            alt="Chaitanyam AI"
+            className="h-full w-full object-contain p-0.5"
+          />
         </div>
-        <div className="min-w-0">
-          <h2 className="text-base font-bold tracking-tight text-foreground flex items-center gap-2">
-            Chaitanyam AI
-            <span className="text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full bg-accent/20 text-accent-foreground border border-accent/30">
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5 flex-wrap sm:flex-nowrap">
+            <h2 className="text-sm font-bold tracking-tight text-foreground truncate">
+              Chaitanyam AI
+            </h2>
+            <span className="text-[9px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full bg-accent/20 text-accent-foreground border border-accent/30 shrink-0 whitespace-nowrap">
               Gita Companion
             </span>
-          </h2>
-          <p className="text-xs text-muted-foreground truncate">
-            Your companion for wisdom, reflection &amp; inner peace.
+          </div>
+          <p className="text-[11px] text-muted-foreground truncate">
+            Wisdom, reflection &amp; inner peace
           </p>
         </div>
       </div>
 
-      {/* Action Controls: History | New Conversation | Close */}
-      <div className="flex items-center gap-1.5 shrink-0">
+      {/* Action Controls: History | New Conversation | Fullscreen | Close */}
+      <div className="flex items-center gap-1 shrink-0">
         {/* History toggle — Phase 6B.6 */}
         <Button
           variant={showHistory ? "secondary" : "ghost"}
-          size="sm"
+          size="icon"
           onClick={toggleHistory}
           disabled={loading}
-          className="h-9 px-2.5 rounded-xl gap-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
+          className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
           title={showHistory ? "Back to chat" : "View conversation history"}
           aria-label={showHistory ? "Back to active chat" : "View conversation history"}
           aria-pressed={showHistory}
         >
-          <History className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">{showHistory ? "Chat" : "History"}</span>
+          <History className="h-4 w-4" />
         </Button>
 
         {/* New Conversation reset */}
         <Button
           variant="ghost"
-          size="sm"
+          size="icon"
           onClick={startNewConversation}
           disabled={loading}
-          className="h-9 px-2.5 rounded-xl gap-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
+          className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
           title="Start a new conversation"
           aria-label="Start a new conversation"
         >
-          <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
-          <span className="hidden sm:inline">New Chat</span>
+          <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
         </Button>
 
         {/* Fullscreen Expand — Phase 6C.2.3 */}
@@ -76,7 +80,7 @@ export default function ChaitanyamHeader() {
           variant="ghost"
           size="icon"
           onClick={handleFullscreen}
-          className="h-9 w-9 rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
+          className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
           title="Open in full page"
           aria-label="Open Chaitanyam AI in dedicated full page"
         >
@@ -88,11 +92,11 @@ export default function ChaitanyamHeader() {
           variant="ghost"
           size="icon"
           onClick={closeChat}
-          className="h-9 w-9 rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
+          className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
           title="Close assistant"
           aria-label="Close Chaitanyam AI assistant"
         >
-          <X className="h-5 w-5" />
+          <X className="h-4 w-4" />
         </Button>
       </div>
     </div>

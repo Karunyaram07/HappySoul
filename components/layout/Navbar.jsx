@@ -42,7 +42,6 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     
     return () => {
-      clearTimeout(timer);
       subscription.unsubscribe();
       window.removeEventListener("scroll", handleScroll);
     };

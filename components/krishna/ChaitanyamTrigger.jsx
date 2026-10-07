@@ -34,8 +34,12 @@ export default function ChaitanyamTrigger() {
         <span className="absolute -inset-1 rounded-full bg-accent/20 blur-md opacity-75 group-hover:opacity-100 transition-opacity animate-pulse pointer-events-none" />
       )}
 
-      <div className="relative flex h-7 w-7 items-center justify-center rounded-full bg-accent/20 text-accent border border-accent/40 shadow-inner shrink-0">
-        <Sparkles className="h-4 w-4 text-amber-300 animate-pulse" />
+      <div className="relative flex h-7 w-7 items-center justify-center rounded-full overflow-hidden border border-accent/40 shadow-inner shrink-0">
+        <img
+          src="/chaitanyam-assets/chaitanyam-ai-icon.png"
+          alt=""
+          className="h-full w-full object-contain"
+        />
       </div>
 
       <div className="relative text-left hidden sm:flex flex-col">

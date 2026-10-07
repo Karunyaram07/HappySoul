@@ -27,6 +27,7 @@ import ChaitanyamHistoryList from "./ChaitanyamHistoryList";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { getLanguageTypography } from "@/lib/typography";
+import ChaitanyamAtmosphere from "./ChaitanyamAtmosphere";
 
 export default function ChaitanyamWorkspace({ profile }) {
   const {
@@ -112,8 +113,12 @@ export default function ChaitanyamWorkspace({ profile }) {
 
           {/* Title & Spiritual Subtitle */}
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 border border-primary/30 shadow-xs">
-              <Sparkles className="h-4 w-4 text-amber-300 animate-pulse" />
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-card border border-primary/30 shadow-xs overflow-hidden p-0.5">
+              <img
+                src="/chaitanyam-assets/chaitanyam-ai-icon.png"
+                alt="Chaitanyam AI"
+                className="h-full w-full object-contain"
+              />
             </div>
 
             <div className="min-w-0">
@@ -264,14 +269,11 @@ export default function ChaitanyamWorkspace({ profile }) {
 
         {/* MAIN CHAT COLUMN */}
         <main
-          className="flex-1 flex flex-col h-full overflow-hidden bg-background relative"
+          className="flex-1 flex flex-col h-full overflow-hidden relative"
           role="main"
         >
-          {/* Subtle ambient light backdrops */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <div className="absolute top-10 left-1/4 h-[350px] w-[350px] rounded-full bg-primary/5 blur-[120px]" />
-            <div className="absolute bottom-20 right-1/4 h-[300px] w-[300px] rounded-full bg-accent/10 blur-[100px]" />
-          </div>
+          {/* Krishna-themed visual atmosphere (provided light asset + intentional dark treatment) */}
+          <ChaitanyamAtmosphere />
 
           {/* Scrollable messages container */}
           <div className="flex-1 overflow-hidden flex flex-col relative z-10">

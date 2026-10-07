@@ -78,8 +78,12 @@ export default function ChaitanyamCard() {
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-5">
             {/* Icon + Branding */}
             <div className="flex items-center gap-3">
-              <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 border border-primary/30 shadow-md">
-                <Sparkles className="h-5 w-5 text-amber-300" aria-hidden="true" />
+              <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 border border-primary/30 shadow-md overflow-hidden">
+                <img
+                  src="/chaitanyam-assets/chaitanyam-ai-icon.png"
+                  alt="Chaitanyam AI"
+                  className="h-full w-full object-contain p-0.5"
+                />
                 {/* Soft breathing ring — disabled for reduced-motion users */}
                 {!shouldReduceMotion && (
                   <span
