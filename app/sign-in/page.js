@@ -11,6 +11,7 @@ import { Sparkles, Mail, Lock, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Image from "next/image";
 
 function SignInForm() {
   const router = useRouter();
@@ -89,8 +90,15 @@ function SignInForm() {
         {/* Logo / Header */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 group mb-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md">
-              <Sparkles className="h-5 w-5 text-accent animate-pulse" />
+            <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl shadow-md transition-transform group-hover:scale-105">
+              <Image
+                src="/mark.png"
+                alt="Happy Soul"
+                fill
+                sizes="36px"
+                className="object-contain"
+                priority
+              />
             </div>
             <span className="text-2xl font-bold tracking-tight text-foreground">
               Happy Soul
