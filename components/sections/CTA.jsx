@@ -43,7 +43,7 @@ export default function CTA() {
           {/* Button */}
           <div className="mt-8 flex justify-center">
             <a
-              href="#signup"
+              href="./dashboard"
               className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3.5 text-base font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary/95 hover:shadow-lg hover:scale-[1.02]"
             >
               Get Started Free

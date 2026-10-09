@@ -50,7 +50,7 @@ export default function Hero() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-8 items-center">
-          
+
           {/* Hero Content Left */}
           <motion.div
             className="relative lg:col-span-7 flex flex-col justify-center space-y-8"
@@ -143,14 +143,14 @@ export default function Hero() {
               variants={itemVariants}
             >
               <a
-                href="#signup"
+                href="./dashboard"
                 className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3.5 text-base font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary/95 hover:shadow-lg hover:scale-[1.02]"
               >
                 Start Your Journey
                 <ArrowRight className="ml-2 h-4 w-4" />
               </a>
               <a
-                href="#features"
+                href="./dashboard/chaitanyam"
                 className="inline-flex items-center justify-center rounded-xl border border-border bg-background/50 backdrop-blur-sm px-6 py-3.5 text-base font-semibold text-foreground shadow-sm transition-all hover:bg-secondary hover:scale-[1.02]"
               >
                 Meet Krishna AI
@@ -166,14 +166,14 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.3 }}
           >
             <div className="relative w-full max-w-[420px] rounded-3xl border border-border bg-card/60 backdrop-blur-md p-8 shadow-xl dark:bg-card/30">
-              
+
               {/* Graphic Flow Layout */}
               <h3 className="text-center font-semibold text-sm tracking-wider uppercase text-muted-foreground mb-8">
                 The Journey to Inner Harmony
               </h3>
 
               <div className="relative flex flex-col items-center gap-6">
-                
+
                 {/* Connecting Line background */}
                 <div className="absolute top-4 bottom-4 left-1/2 w-0.5 -translate-x-1/2 bg-gradient-to-b from-primary via-accent to-yellow-400 z-0" />
 
@@ -194,7 +194,7 @@ export default function Hero() {
                         </div>
                         <span className="font-medium text-sm text-foreground">{step.label}</span>
                       </div>
-                      
+
                       <div className="text-xs text-muted-foreground opacity-60 group-hover:opacity-100 group-hover:text-primary transition-opacity font-semibold">
                         Step 0{idx + 1}
                       </div>

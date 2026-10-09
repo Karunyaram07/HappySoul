@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +21,7 @@ export default function Navbar() {
   // * Avoid hydration mismatches by initializing client states in useEffect
   useEffect(() => {
     const supabase = createClient();
-    
+
     // * Query current authenticated user session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
@@ -40,7 +41,7 @@ export default function Navbar() {
     };
 
     window.addEventListener("scroll", handleScroll);
-    
+
     return () => {
       subscription.unsubscribe();
       window.removeEventListener("scroll", handleScroll);
@@ -63,20 +64,27 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-        isScrolled
-          ? "border-b border-border bg-background/80 backdrop-blur-md shadow-sm"
-          : "bg-transparent border-b border-transparent"
-      }`}
+      className={`sticky top-0 z-50 w-full transition-all duration-300 ${isScrolled
+        ? "border-b border-border bg-background/80 backdrop-blur-md shadow-sm"
+        : "bg-transparent border-b border-transparent"
+        }`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo / Brand Name */}
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md transition-transform group-hover:scale-105">
-                <Sparkles className="h-5 w-5 text-accent animate-pulse" />
+              <div className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl shadow-md transition-transform group-hover:scale-105">
+                <Image
+                  src="/mark.png"
+                  alt="Happy Soul"
+                  fill
+                  sizes="36px"
+                  className="object-contain"
+                  priority
+                />
               </div>
+
               <span className="text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
                 Happy Soul
               </span>
@@ -119,7 +127,7 @@ export default function Navbar() {
             ) : (
               <>
                 <Link
-                  href="/#features"
+                  href="/sign-in"
                   className="text-sm font-semibold hover:text-primary text-foreground px-4 py-2 rounded-lg transition-colors"
                 >
                   Explore
